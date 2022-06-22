@@ -1,0 +1,27 @@
+.logo {
+  width: 40px;
+  height: 40px;
+}
+
+.main-content {
+  padding-top: 6rem;
+}
+
+.casillaBM {
+  width: 30px;
+  height: 30px;
+  background: whitesmoke;
+  border: 3px solid #555;
+}
+
+.BombaBM {
+  width: 30px;
+  height: 30px;
+  background: red;
+  border: 3px solid #555;
+}
+
+.tableBM {
+  background-color: black;
+  margin: auto;
+}

@@ -5,7 +5,7 @@ var noIfnormar=0;
 var stringAccion;
 
 
-Comenzar();
+//Comenzar();
 
 
 function Comenzar(){
@@ -66,6 +66,7 @@ function Resultado(){
     }
     InformarPantalla()
 }
+
 function InformarPantalla(){
     document.getElementById("numero").textContent="Su Numero es:"+ numeroGuardado;
 }
@@ -89,10 +90,73 @@ function solicitarNumero(){
     if (accion==6){
         stringAccion= (numeroGuardado + "dividido X cantidad de veces"); 
     }
-    numeroPedido = parseInt(prompt("Numero Actual:" + numeroGuardado + "\n Ingrese su numero","0"));
-    
+    numeroPedido = parseInt(prompt("Numero Actual:" + numeroGuardado + "\n Ingrese su numero","0"));    
 }
-function solicitarPrimerNumero(){
-    numeroGuardado = parseInt(prompt("Ingrese su numero inicial","0"));
+
+
+function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
+
+    var body = document.getElementById("content");
+    var tabla   = document.createElement("table");
+    var tblBody = document.createElement("tbody");
+    var auxiliar=0;
+
+    tabla.setAttribute("class", "tableBM");
     
-}
+    var minas = new Array;
+    for (var i = 0; i < cantidadMinas; i++){
+        minas[i]=new Array (Math.floor(getRandomArbitrary(0,cantidadFilas)), Math.floor(getRandomArbitrary(0,cantidadColumnas)));
+    }
+
+    //borrar
+    console.log(minas)
+    var minasAxuliar
+
+
+    for (var i = 0; i < cantidadFilas; i++) {
+        var fila = document.createElement("tr");
+
+        for (var j = 0; j < cantidadColumnas; j++) {
+            for (var x = 0; x < minas.length; x++){
+                minasAxuliar= minas[x]
+                if ((i==minasAxuliar[0]) && (j==minasAxuliar[1])){
+                    auxiliar=1;
+                }
+            }
+            var celda = document.createElement("td");
+            var botonCelda = document.createElement("a");
+            var contenidoCelda = document.createElement("div");
+            
+            if (auxiliar==1){
+                botonCelda.setAttribute("href", 'javascript:alert("Bomba")');
+                contenidoCelda.setAttribute("class", "BombaBM");
+                auxiliar=0;
+            }
+            else{
+                botonCelda.setAttribute("href", 'javascript:alert("Libre")');
+                contenidoCelda.setAttribute("class", "casillaBM");
+            }
+            
+
+
+
+            botonCelda.appendChild(contenidoCelda);
+            celda.appendChild(botonCelda);
+            fila.appendChild(celda);
+        }
+
+        // agrega la hilera al final de la tabla (al final del elemento tblbody)
+        tblBody.appendChild(fila);
+    }
+  
+    // posiciona el <tbody> debajo del elemento <table>
+    tabla.appendChild(tblBody);
+    // appends <table> into <body>
+    body.appendChild(tabla);
+    // modifica el atributo "border" de la tabla y lo fija a "2";
+    tabla.setAttribute("border", "2");
+  }
+
+  function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+  }
