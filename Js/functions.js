@@ -1,132 +1,77 @@
-var numeroGuardado=0;
-var numeroPedido=0;
-var auxiliar=0;
-var noIfnormar=0;
-var stringAccion;
-
-
-//Comenzar();
-
-
-function Comenzar(){
-    alert("Calculadora Basica con JS");
-    solicitarPrimerNumero();
-    InformarPantalla();
-}
-
-function accion(accion){
-
-    accion = parseInt(accion);
-    
-    if (accion==1){
-        solicitarNumero();
-        numeroGuardado += numeroPedido;
-    }
-    else if (accion==2){
-        solicitarNumero();
-        numeroGuardado -= numeroPedido;
-    }
-    else if (accion==3){
-        solicitarNumero();
-        numeroGuardado = numeroPedido * numeroGuardado;
-    }
-    else if (accion==4){
-        solicitarNumero();
-        numeroGuardado =numeroGuardado/ numeroPedido ;
-    }
-    else if (accion==5){
-        solicitarNumero();
-        auxiliar=numeroGuardado
-        for (var i=0; i<numeroPedido; i++){
-            numeroGuardado = numeroGuardado*auxiliar
-        }
-        auxiliar=0
-    }
-    else if (accion==6){
-        solicitarNumero();
-        auxiliar=numeroGuardado
-        for (var i=0; i<numeroPedido; i++){
-            numeroGuardado = numeroGuardado*auxiliar
-        }
-        auxiliar=0
-    }
-    else{
-        alert("Accion Ingresa Incorrecta Ingrese Nuevamente");
-        noIfnormar=1;
-    }
-    Resultado()
-}
-
-function Resultado(){
-    if(noIfnormar!=0){
-        alert("Accion Ingresa Incorrecta Ingrese Nuevamente");
-    }
-    else{
-        alert("Su numero es:" + numeroGuardado);
-    }
-    InformarPantalla()
-}
-
-function InformarPantalla(){
-    document.getElementById("numero").textContent="Su Numero es:"+ numeroGuardado;
-}
-
-function solicitarNumero(){
-    if (accion==1){
-        stringAccion= (numeroGuardado + "+ X"); 
-    }
-    if (accion==2){
-        stringAccion= (numeroGuardado + "- X"); 
-    }
-    if (accion==3){
-        stringAccion= (numeroGuardado + "* X"); 
-    }
-    if (accion==4){
-        stringAccion= (numeroGuardado + "/ X"); 
-    }
-    if (accion==5){
-        stringAccion= (numeroGuardado + "multiplicado X cantidad de veces"); 
-    }
-    if (accion==6){
-        stringAccion= (numeroGuardado + "dividido X cantidad de veces"); 
-    }
-    numeroPedido = parseInt(prompt("Numero Actual:" + numeroGuardado + "\n Ingrese su numero","0"));    
-}
-
-
+//funcion generar buscaminas
 function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
 
-    var body = document.getElementById("content");
+    // seteo variables
+    var contenido = document.getElementById("content");
     var tabla   = document.createElement("table");
     var tblBody = document.createElement("tbody");
-    var auxiliar=0;
+    var auxiliar;
+    var minas = new Array;
+    var auxiliarMinas;
 
+    //clase a la tabla
     tabla.setAttribute("class", "tableBM");
     
-    var minas = new Array;
+    //random minas
     for (var i = 0; i < cantidadMinas; i++){
         minas[i]=new Array (Math.floor(getRandomArbitrary(0,cantidadFilas)), Math.floor(getRandomArbitrary(0,cantidadColumnas)));
     }
 
-    //borrar
+    //ordenar minas para detectar repetidas
+    minas.sort();
+
     console.log(minas)
-    var minasAxuliar
 
+    //al encontrar una repetida pongo en la proxima posicion libre
+    for (var i = 0; i < cantidadMinas; i++){
+        
+        console.log("entre")
+        
+        //comparo las pociones del array "Esta fallando"
+        if(minas[i + 1] === minas[i]){
 
-    for (var i = 0; i < cantidadFilas; i++) {
-        var fila = document.createElement("tr");
+            //tengo que sacar esta variable para no ocupar mas espacio de memoria
+            auxiliarMinas=minas[i + 1]
 
-        for (var j = 0; j < cantidadColumnas; j++) {
-            for (var x = 0; x < minas.length; x++){
-                minasAxuliar= minas[x]
-                if ((i==minasAxuliar[0]) && (j==minasAxuliar[1])){
-                    auxiliar=1;
-                }
+            //detecto si la nueva ubicacion puede ser en la misma columna
+            if ((auxiliarMinas[1] + 1 ) > cantidadColumnas){
+                //en caso no se pueda sumo 1 en la columna
+                auxiliarMinas[0]=auxiliarMinas[0]+1
+                auxiliarMinas[1]=0
             }
+            //aun no se me ocurrio como salvar esto de manera consisa
+            //else if(auxiliarMinas[0] == cantidadFilas){}
+            else {
+                auxiliarMinas[1]=auxiliarMinas[1]+1
+            }
+            minas[i+1] = auxiliarMinas;
+        }
+    }
+
+    //borrar, pruebas
+    console.log(minas)
+    
+
+    //añadir filas y columnas
+    for (var i = 0; i < cantidadFilas; i++) {
+        //crear fila
+        var fila = document.createElement("tr");
+        for (var j = 0; j < cantidadColumnas; j++) {
+            //crear columna
             var celda = document.createElement("td");
             var botonCelda = document.createElement("a");
             var contenidoCelda = document.createElement("div");
+
+            //detectar si hay una mina en esa casilla
+            for (var x = 0; x < minas.length; x++){
+                //tengo que sacar esta variable para no ocupar mas espacio de memoria
+                auxiliarMinas= minas[x]
+                if ((i==auxiliarMinas[0]) && (j==auxiliarMinas[1])){
+                    auxiliar=1;
+                }
+            }
             
+            //estilo temporal para programar
             if (auxiliar==1){
                 botonCelda.setAttribute("href", 'javascript:alert("Bomba")');
                 contenidoCelda.setAttribute("class", "BombaBM");
@@ -136,27 +81,21 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
                 botonCelda.setAttribute("href", 'javascript:alert("Libre")');
                 contenidoCelda.setAttribute("class", "casillaBM");
             }
-            
-
-
-
+            //asignar los objetos
             botonCelda.appendChild(contenidoCelda);
             celda.appendChild(botonCelda);
             fila.appendChild(celda);
         }
-
-        // agrega la hilera al final de la tabla (al final del elemento tblbody)
+        //asignar los objetos
         tblBody.appendChild(fila);
     }
-  
-    // posiciona el <tbody> debajo del elemento <table>
+    //asignar los objetos
     tabla.appendChild(tblBody);
-    // appends <table> into <body>
-    body.appendChild(tabla);
-    // modifica el atributo "border" de la tabla y lo fija a "2";
-    tabla.setAttribute("border", "2");
+    contenido.appendChild(tabla);
+    
   }
 
+  //funcion ramdom con minimo maximo
   function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
   }

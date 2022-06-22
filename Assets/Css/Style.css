@@ -24,4 +24,5 @@
 .tableBM {
   background-color: black;
   margin: auto;
+  border: 3px solid black;
 }
