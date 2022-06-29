@@ -1,56 +1,47 @@
+//funcion ramdom con minimo maximo
+function getRandomArbitrary(min, max) {
+    return Math.floor((Math.random() * (max - min + 1)) + min);
+}
+
 //funcion generar buscaminas
+
 function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
 
     // seteo variables
     var contenido = document.getElementById("content");
     var tabla   = document.createElement("table");
-    var tblBody = document.createElement("tbody");
-    var auxiliar;
-    var minas = new Array;
-    var auxiliarMinas;
+    var tblBody = document.createElement("tbody");;
+    var casillas  = new Array;
 
     //clase a la tabla
     tabla.setAttribute("class", "tableBM");
     
-    //random minas
-    for (var i = 0; i < cantidadMinas; i++){
-        minas[i]=new Array (Math.floor(getRandomArbitrary(0,cantidadFilas)), Math.floor(getRandomArbitrary(0,cantidadColumnas)));
+    //genero casillas
+    for (var i = 0; i < cantidadFilas * cantidadColumnas; i++){
+        casillas[i]="vacio";
     }
 
-    //ordenar minas para detectar repetidas
-    minas.sort();
-
-    console.log(minas)
-
-    //al encontrar una repetida pongo en la proxima posicion libre
-    for (var i = 0; i < cantidadMinas; i++){
-        
-        console.log("entre")
-        
-        //comparo las pociones del array "Esta fallando"
-        if(minas[i + 1] === minas[i]){
-
-            //tengo que sacar esta variable para no ocupar mas espacio de memoria
-            auxiliarMinas=minas[i + 1]
-
-            //detecto si la nueva ubicacion puede ser en la misma columna
-            if ((auxiliarMinas[1] + 1 ) > cantidadColumnas){
-                //en caso no se pueda sumo 1 en la columna
-                auxiliarMinas[0]=auxiliarMinas[0]+1
-                auxiliarMinas[1]=0
+    if (casillas.length >= cantidadMinas){
+        //random minas
+        for (var i = 0, ramdom=0; i < cantidadMinas; i++){
+            ramdom=getRandomArbitrary(0,casillas.length-1)
+            if (casillas[ramdom] == "bomba"){
+                i--
             }
-            //aun no se me ocurrio como salvar esto de manera consisa
-            //else if(auxiliarMinas[0] == cantidadFilas){}
-            else {
-                auxiliarMinas[1]=auxiliarMinas[1]+1
+            else{
+                casillas[ramdom]="bomba";
             }
-            minas[i+1] = auxiliarMinas;
         }
     }
+    else{
+        alert("fallo critico")
+    }   
 
-    //borrar, pruebas
-    console.log(minas)
     
+
+    //casillas = numerosCasillas(casillas, cantidadFilas, cantidadColumnas)
+
+    console.log(casillas)
 
     //añadir filas y columnas
     for (var i = 0; i < cantidadFilas; i++) {
@@ -62,26 +53,17 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
             var botonCelda = document.createElement("a");
             var contenidoCelda = document.createElement("div");
 
-            //detectar si hay una mina en esa casilla
-            for (var x = 0; x < minas.length; x++){
-                //tengo que sacar esta variable para no ocupar mas espacio de memoria
-                auxiliarMinas= minas[x]
-                if ((i==auxiliarMinas[0]) && (j==auxiliarMinas[1])){
-                    auxiliar=1;
-                }
-            }
-            
             //estilo temporal para programar
-            if (auxiliar==1){
+            if (casillas[i*cantidadColumnas+j]=="bomba"){
                 botonCelda.setAttribute("href", 'javascript:alert("Bomba")');
                 contenidoCelda.setAttribute("class", "BombaBM");
-                auxiliar=0;
             }
             else{
                 botonCelda.setAttribute("href", 'javascript:alert("Libre")');
                 contenidoCelda.setAttribute("class", "casillaBM");
             }
             //asignar los objetos
+            contenidoCelda.setAttribute("id", "casilla"+(i*cantidadColumnas+j));
             botonCelda.appendChild(contenidoCelda);
             celda.appendChild(botonCelda);
             fila.appendChild(celda);
@@ -92,10 +74,50 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
     //asignar los objetos
     tabla.appendChild(tblBody);
     contenido.appendChild(tabla);
-    
-  }
+}
 
-  //funcion ramdom con minimo maximo
-  function getRandomArbitrary(min, max) {
-    return Math.random() * (max - min) + min;
-  }
+//funcion para saber cuantas bombas hay al rededor de cada casilla
+function numerosCasillas(casillas, cantidadFilas, cantidadColumnas) {
+    var total
+    var columna=0
+    var fila=0
+    for (let i=0; i < casillas.length; i++) {
+        total=0;
+        if (casillas[i]=="vacio"){
+            console.log(i)
+            // Vemos si hay bomba en la casilla anterior
+            if ((casillas[i-1]=="bomba") && (columna!=0))total++, console.log("1");
+            
+            // Vemos si hay bomba en la casilla siguiente
+            if (casillas[i+1]=="bomba"&& (columna < cantidadColumnas))total++, console.log("2");
+
+            // Vemos si hay bomba en la casilla superior
+            if ((casillas[i-cantidadFilas]=="bomba")  && (fila!=0)) total++, console.log("3");
+                
+            // Vemos si hay bomba en la casilla siguiente de la fila anterior
+            if ((casillas[i-cantidadFilas+1]=="bomba") && (fila!=0) && (columna < cantidadColumnas)) total++, console.log("4");
+            
+            // Vemos si hay bomba en la casilla anterior de la fila anterior
+            if ((casillas[i-cantidadFilas-1]=="bomba") && (fila!=0) && (columna!=0)) total++, console.log("5");
+
+            // Vemos si hay bomba en la casilla inferior
+            if ((casillas[i+cantidadFilas]=="bomba") && (fila < cantidadFilas)) total++, console.log("6");
+
+            // Vemos si hay bomba en la casilla siguiente de la fila siguiente
+            if ((casillas[i+cantidadFilas+1]=="bomba") && (fila < cantidadFilas) && (columna < cantidadColumnas)) total++, console.log("7");
+            
+            // Vemos si hay bomba en la casilla anterior de la fila siguiente
+            if ((casillas[i+cantidadFilas-1]=="bomba") && (fila < cantidadFilas) && (columna!=0)) total++, console.log("8");
+
+            casillas[i]=total
+            console.log("columna:" + columna)
+            console.log("fila:" + fila)
+        }
+        columna++
+        if (columna>cantidadColumnas){
+            fila++
+            columna=0
+        }
+    }
+    return casillas;
+}
