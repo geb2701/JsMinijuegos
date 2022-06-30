@@ -39,7 +39,7 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
 
     
 
-    //casillas = numerosCasillas(casillas, cantidadFilas, cantidadColumnas)
+    casillas = numerosCasillas(casillas, cantidadFilas, cantidadColumnas)
 
     console.log(casillas)
 
@@ -59,7 +59,7 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
                 contenidoCelda.setAttribute("class", "BombaBM");
             }
             else{
-                botonCelda.setAttribute("href", 'javascript:alert("Libre")');
+                botonCelda.setAttribute("href", 'javascript:alert("'+ casillas[i*cantidadColumnas+j] +'")');
                 contenidoCelda.setAttribute("class", "casillaBM");
             }
             //asignar los objetos
@@ -79,45 +79,43 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
 //funcion para saber cuantas bombas hay al rededor de cada casilla
 function numerosCasillas(casillas, cantidadFilas, cantidadColumnas) {
     var total
-    var columna=0
-    var fila=0
+    var columna=1
+    var fila=1
     for (let i=0; i < casillas.length; i++) {
         total=0;
         if (casillas[i]=="vacio"){
-            console.log(i)
             // Vemos si hay bomba en la casilla anterior
-            if ((casillas[i-1]=="bomba") && (columna!=0))total++, console.log("1");
+            if ((casillas[i-1]=="bomba") && (columna!=1))total++;
             
             // Vemos si hay bomba en la casilla siguiente
-            if (casillas[i+1]=="bomba"&& (columna < cantidadColumnas))total++, console.log("2");
+            if (casillas[i+1]=="bomba" && (columna < cantidadColumnas))total++;
 
             // Vemos si hay bomba en la casilla superior
-            if ((casillas[i-cantidadFilas]=="bomba")  && (fila!=0)) total++, console.log("3");
+            if ((casillas[i-cantidadFilas]=="bomba")  && (fila!=1)) total++;
                 
             // Vemos si hay bomba en la casilla siguiente de la fila anterior
-            if ((casillas[i-cantidadFilas+1]=="bomba") && (fila!=0) && (columna < cantidadColumnas)) total++, console.log("4");
+            if ((casillas[i-cantidadFilas+1]=="bomba") && (fila!=1) && (columna < cantidadColumnas)) total++;
             
             // Vemos si hay bomba en la casilla anterior de la fila anterior
-            if ((casillas[i-cantidadFilas-1]=="bomba") && (fila!=0) && (columna!=0)) total++, console.log("5");
+            if ((casillas[i-cantidadFilas-1]=="bomba") && (fila!=1) && (columna!=1)) total++;
 
             // Vemos si hay bomba en la casilla inferior
-            if ((casillas[i+cantidadFilas]=="bomba") && (fila < cantidadFilas)) total++, console.log("6");
+            if ((casillas[i+cantidadFilas]=="bomba") && (fila < cantidadFilas)) total++;
 
             // Vemos si hay bomba en la casilla siguiente de la fila siguiente
-            if ((casillas[i+cantidadFilas+1]=="bomba") && (fila < cantidadFilas) && (columna < cantidadColumnas)) total++, console.log("7");
+            if ((casillas[i+cantidadFilas+1]=="bomba") && (fila < cantidadFilas) && (columna < cantidadColumnas)) total++;
             
             // Vemos si hay bomba en la casilla anterior de la fila siguiente
-            if ((casillas[i+cantidadFilas-1]=="bomba") && (fila < cantidadFilas) && (columna!=0)) total++, console.log("8");
+            if ((casillas[i+cantidadFilas-1]=="bomba") && (fila < cantidadFilas) && (columna!=1)) total++;
 
             casillas[i]=total
-            console.log("columna:" + columna)
-            console.log("fila:" + fila)
         }
         columna++
-        if (columna>cantidadColumnas){
+        if (columna > cantidadColumnas){
             fila++
-            columna=0
+            columna=1
         }
+        
     }
     return casillas;
 }
