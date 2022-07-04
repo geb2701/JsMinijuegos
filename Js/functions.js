@@ -33,15 +33,13 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
             }
         }
     }
+    // evitar for infinito
     else{
-        alert("fallo critico")
-    }   
-
-    
-
+        alert("Partida Imposible")
+    }
+ 
+    //funcion para saber cantidad de bombas al aldo de cada casilla
     casillas = numerosCasillas(casillas, cantidadFilas, cantidadColumnas)
-
-    console.log(casillas)
 
     //añadir filas y columnas
     for (var i = 0; i < cantidadFilas; i++) {
@@ -74,13 +72,18 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
     //asignar los objetos
     tabla.appendChild(tblBody);
     contenido.appendChild(tabla);
+
+    ayuda(casillas)
 }
 
 //funcion para saber cuantas bombas hay al rededor de cada casilla
 function numerosCasillas(casillas, cantidadFilas, cantidadColumnas) {
+    //total de bombas en la casilla a analizar
     var total
+    //variables para saber en que pocicion me encentro parado en la tabla
     var columna=1
     var fila=1
+
     for (let i=0; i < casillas.length; i++) {
         total=0;
         if (casillas[i]=="vacio"){
@@ -110,6 +113,7 @@ function numerosCasillas(casillas, cantidadFilas, cantidadColumnas) {
 
             casillas[i]=total
         }
+        //avanzo una posicion en la tabla
         columna++
         if (columna > cantidadColumnas){
             fila++
@@ -118,4 +122,15 @@ function numerosCasillas(casillas, cantidadFilas, cantidadColumnas) {
         
     }
     return casillas;
+}
+
+function ayuda(casillas){
+    var ayuda  = new Array;
+    for (let i=1; i < 9; i++){
+        ayuda[0]=casillas.filter(element => element == i);
+        ayuda[i]=ayuda[0].length;
+        if(ayuda[i]!=0){
+            console.log("Hay " + ayuda[i] + " casillas con "  + i + " bombas a su alrededor");
+        }
+    }
 }
