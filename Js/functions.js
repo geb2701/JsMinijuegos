@@ -3,6 +3,25 @@ function getRandomArbitrary(min, max) {
     return Math.floor((Math.random() * (max - min + 1)) + min);
 }
 
+//funcion recuperar Variables de html
+function RecuperarMinas(){
+    var Ccolumna = document.getElementById("Ccolumnas").value
+    var Cfilas = document.getElementById("Cfilas").value
+    var Cminas = document.getElementById("Cminas").value
+    
+    if ((Ccolumna<=0) || (Cfilas<=0) || (Cminas<=0)){
+        alert("Ningun Valor puede ser 0 o menor")
+    }
+    else if(Cminas >= Ccolumna * Cfilas){
+        alert("No pueden haber mas minas que casillas")
+    }
+    else{
+        document.getElementById("TablaEntrada").setAttribute("hidden",true)
+        genera_tablaBM(Cfilas,Ccolumna,Cminas)
+    }
+    
+}
+
 //funcion generar buscaminas
 
 function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
