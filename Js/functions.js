@@ -5,9 +5,9 @@ function getRandomArbitrary(min, max) {
 
 //funcion recuperar Variables de html
 function RecuperarMinas(){
-    var Ccolumna = document.getElementById("Ccolumnas").value
-    var Cfilas = document.getElementById("Cfilas").value
-    var Cminas = document.getElementById("Cminas").value
+    let Ccolumna = document.getElementById("Ccolumnas").value
+    let Cfilas = document.getElementById("Cfilas").value
+    let Cminas = document.getElementById("Cminas").value
     
     if ((Ccolumna<=0) || (Cfilas<=0) || (Cminas<=0)){
         alert("Ningun Valor puede ser 0 o menor")
@@ -27,22 +27,22 @@ function RecuperarMinas(){
 function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
 
     // seteo variables
-    var contenido = document.getElementById("content");
-    var tabla   = document.createElement("table");
-    var tblBody = document.createElement("tbody");;
-    var casillas  = new Array;
+    let contenido = document.getElementById("content");
+    let tabla   = document.createElement("table");
+    let tblBody = document.createElement("tbody");;
+    let casillas  = new Array;
 
     //clase a la tabla
     tabla.setAttribute("class", "tableBM");
     
     //genero casillas
-    for (var i = 0; i < cantidadFilas * cantidadColumnas; i++){
+    for (let i = 0; i < cantidadFilas * cantidadColumnas; i++){
         casillas[i]="vacio";
     }
 
     if (casillas.length >= cantidadMinas){
         //random minas
-        for (var i = 0, ramdom=0; i < cantidadMinas; i++){
+        for (let i = 0, ramdom=0; i < cantidadMinas; i++){
             ramdom=getRandomArbitrary(0,casillas.length-1)
             if (casillas[ramdom] == "bomba"){
                 i--
@@ -61,14 +61,14 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
     casillas = numerosCasillas(casillas, cantidadFilas, cantidadColumnas)
 
     //añadir filas y columnas
-    for (var i = 0; i < cantidadFilas; i++) {
+    for (let i = 0; i < cantidadFilas; i++) {
         //crear fila
-        var fila = document.createElement("tr");
-        for (var j = 0; j < cantidadColumnas; j++) {
+        let fila = document.createElement("tr");
+        for (let j = 0; j < cantidadColumnas; j++) {
             //crear columna
-            var celda = document.createElement("td");
-            var botonCelda = document.createElement("a");
-            var contenidoCelda = document.createElement("div");
+            let celda = document.createElement("td");
+            let botonCelda = document.createElement("a");
+            let contenidoCelda = document.createElement("div");
 
             //estilo temporal para programar
             if (casillas[i*cantidadColumnas+j]=="bomba"){
@@ -98,10 +98,10 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
 //funcion para saber cuantas bombas hay al rededor de cada casilla
 function numerosCasillas(casillas, cantidadFilas, cantidadColumnas) {
     //total de bombas en la casilla a analizar
-    var total
+    let total
     //variables para saber en que pocicion me encentro parado en la tabla
-    var columna=1
-    var fila=1
+    let columna=1
+    let fila=1
 
     for (let i=0; i < casillas.length; i++) {
         total=0;
@@ -144,7 +144,7 @@ function numerosCasillas(casillas, cantidadFilas, cantidadColumnas) {
 }
 
 function ayuda(casillas){
-    var ayuda  = new Array;
+    let ayuda  = new Array;
     for (let i=1; i < 9; i++){
         ayuda[0]=casillas.filter(element => element == i);
         ayuda[i]=ayuda[0].length;
