@@ -77,14 +77,17 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
             let contenidoCelda = document.createElement("div");
 
             //estilo temporal para programar
-            if (casillas[i*cantidadColumnas+j]=="bomba"){
+            /*if (casillas[i*cantidadColumnas+j]=="bomba"){
                 //botonCelda.setAttribute("href", 'javascript:alert("Bomba")');
                 contenidoCelda.setAttribute("class", "BombaBM");
             }
             else{
                 //botonCelda.setAttribute("href", 'javascript:alert("'+ casillas[i*cantidadColumnas+j] +'")');
                 contenidoCelda.setAttribute("class", "casillaBM");
-            }
+            }*/
+
+            contenidoCelda.setAttribute("class", "casillaBM");
+
             //asignar los objetos
             botonCelda.setAttribute("class", "casillaA");
             botonCelda.setAttribute("onclick", 'javascript:pulsar(' + (i*cantidadColumnas+j) + ')');
