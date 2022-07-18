@@ -32,9 +32,8 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
     // seteo variables
     let contenido = document.getElementById("content");
     let tabla   = document.createElement("table");
-    let tblBody = document.createElement("tbody");;
-    
-
+    let tblBody = document.createElement("tbody");
+    document.getElementById("cajaBandera").removeAttribute("hidden")
     //clase a la tabla
     tabla.setAttribute("class", "tableBM");
     
@@ -168,7 +167,7 @@ function ayuda(){
 //funcion para eleguir que hacer dependiendo el modo (bandera o no)
 function pulsar(id){
     if (bandera==1){
-        bandera(id)
+        cambiarBandera(id)
     }
     else if (bandera==0){
         if (document.getElementById("casilla"+id).innerHTML==''){
@@ -179,7 +178,7 @@ function pulsar(id){
 }
 
 //funcion para borrar y poner banderas
-function bandera(id){
+function cambiarBandera(id){
     let ubicacion = document.getElementById("casilla"+id)
     if (ubicacion.innerHTML=='🚩'){
         ubicacion.innerHTML=''
