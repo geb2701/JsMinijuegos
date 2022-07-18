@@ -26,3 +26,46 @@
   margin: auto;
   border: 3px solid black;
 }
+
+.casillaA {
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.cajaBandera {
+  text-align: center;
+  width: 80px;
+  height: 80px;
+  text-decoration: none;
+  font-size: 40px;
+  border-radius: 40px;
+  background-color: white;
+  border: 5px;
+  border-color: black;
+  border-style: solid;
+  position: fixed;
+  top: 400;
+  right: 100%;
+  left: 0;
+  z-index: 1030;
+}
+
+.cajaBanderaSeleccionada {
+  text-align: center;
+  width: 80px;
+  height: 80px;
+  text-decoration: none;
+  font-size: 40px;
+  border-radius: 40px;
+  background-color: gray;
+  border: 5px;
+  border-color: black;
+  border-style: solid;
+  position: fixed;
+  top: 400;
+  right: 100%;
+  left: 0;
+  z-index: 1030;
+}

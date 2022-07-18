@@ -1,0 +1,49 @@
+.casillaBM{
+    width: 30px; 
+    height: 30px; 
+    background: whitesmoke;
+    border: 3px solid #555;
+}
+.BombaBM{
+    width: 30px; 
+    height: 30px; 
+    background: red;
+    border: 3px solid #555;
+
+}
+.tableBM{
+    background-color: black;
+    margin: auto;
+    border: 3px solid black;
+}
+.casillaA{
+    color:black;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+}
+@mixin Mapa ($color) { 
+    text-align: center;
+    width: 80px;
+    height: 80px;
+    text-decoration: none;
+    font-size: 40px;
+    border-radius: 40px;
+    background-color: $color;
+    border: 5px;
+    border-color: black;
+    border-style: solid;
+    position: fixed;
+    top: 400;
+    right: 100%;
+    left: 0;
+    z-index: 1030;
+}
+
+.cajaBandera{
+    @include Mapa (white)
+}
+.cajaBanderaSeleccionada{
+    @include Mapa (gray)
+}
+

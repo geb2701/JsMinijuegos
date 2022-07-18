@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca Minas</title>
     <link rel="stylesheet" href="../Assets/Css/bootstrap.css">
     <link rel="stylesheet" href="../Assets/Css/Style.css">
 </head>
@@ -34,6 +35,23 @@
     </header>
 
     <main class="main-content">
+        <div style="display: none;">
+            <audio id="audioBomba" controls>
+                <source type="audio/wav" src="/Assets/Sounds/Bm/Bomb.wav">
+            </audio>
+            <audio id="audioClick" controls>
+                <source type="audio/wav" src="/Assets/Sounds/Bm/Click.wav">
+            </audio>
+            <audio id="audioVictoria" controls>
+                <source type="audio/wav" src="/Assets/Sounds/Bm/Victoria.wav">
+            </audio>
+            <audio id="audioBandera" controls>
+                <source type="audio/wav" src="/Assets/Sounds/Bm/Bandera.wav">
+            </audio>
+            <audio id="audioBCambio" controls>
+                <source type="audio/wav" src="/Assets/Sounds/Bm/CambioBandera.wav">
+            </audio>
+        </div>
         <table id="TablaEntrada">
             <tr>
                 <td>
@@ -57,6 +75,9 @@
             </tr>
         </table>
         <div id="content">
+            <a onclick="modoBandera()" class="cajaBandera cajaBanderaNoSeleccionada" id="cajaBandera">            
+                🚩
+            </a>
 
         </div>
     </main>
@@ -67,11 +88,7 @@
         </div>
     </footer>
 
-    <script src="../Js/functions.js"></script>
+    <script src="../Js/buscaMinas.js"></script>
     <script src="../Js/bootstrap.js"></script>
-    <script>
-        //genera_tablaBM(columna,fila,bomba)
-        //genera_tablaBM(30,30,100) 
-    </script>
 </body>
 </html>
