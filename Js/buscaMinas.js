@@ -5,35 +5,34 @@ function getRandomArbitrary(min, max) {
 
 //funcion recuperar Variables de html
 function RecuperarMinas(){
-    let Ccolumna = document.getElementById("Ccolumnas").value
-    let Cfilas = document.getElementById("Cfilas").value
-    let Cminas = document.getElementById("Cminas").value
+    let Ccolumna = document.getElementById("Ccolumnas").value;
+    let Cfilas = document.getElementById("Cfilas").value;
+    let Cminas = document.getElementById("Cminas").value;
     
     if ((Ccolumna<=0) || (Cfilas<=0) || (Cminas<=0)){
-        alert("Ningun Valor puede ser 0 o menor")
+        alert("Ningun Valor puede ser 0 o menor");
     }
     else if(Cminas >= Ccolumna * Cfilas){
-        alert("No pueden haber mas minas que casillas")
+        alert("No pueden haber mas minas que casillas");
     }
     else{
-        document.getElementById("TablaEntrada").setAttribute("hidden",true)
-        genera_tablaBM(Cfilas,Ccolumna,Cminas)
+        document.getElementById("TablaEntrada").setAttribute("hidden",true);
+        genera_tablaBM(Cfilas,Ccolumna,Cminas);
     }
     
 }
 let casillas  = new Array;
-let casillasLibres=[0,0]
+let casillasLibres=[0,0];
 let casillaBandera = new Array;
 let casillaBomba = new Array;
 
 //funcion generar buscaminas
 function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
-
     // seteo variables
     let contenido = document.getElementById("content");
     let tabla   = document.createElement("table");
     let tblBody = document.createElement("tbody");
-    document.getElementById("cajaBandera").removeAttribute("hidden")
+    document.getElementById("cajaBandera").removeAttribute("hidden");
     //clase a la tabla
     tabla.setAttribute("class", "tableBM");
     
@@ -41,18 +40,18 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
     for (let i = 0; i < cantidadFilas * cantidadColumnas; i++){
         casillas[i]="vacio";
     }
-    casillasLibres[0]=casillas.length-cantidadMinas
+    casillasLibres[0]=casillas.length-cantidadMinas;
 
     if (casillas.length >= cantidadMinas){
         //random minas
         for (let i = 0, ramdom=0; i < cantidadMinas; i++){
-            ramdom=getRandomArbitrary(0,casillas.length-1)
+            ramdom=getRandomArbitrary(0,casillas.length-1);
             if (casillas[ramdom] == "bomba"){
-                i--
+                i--;
             }
             else{
                 casillas[ramdom]="bomba";
-                casillaBomba.push(ramdom)
+                casillaBomba.push(ramdom);
             }
             
         }
@@ -71,7 +70,7 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
         //crear fila
         let fila = document.createElement("tr");
         for (let j = 0; j < cantidadColumnas; j++) {
-            //crear columna
+            //crear columnas
             let celda = document.createElement("td");
             let botonCelda = document.createElement("a");
             let contenidoCelda = document.createElement("div");
@@ -102,19 +101,16 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
     //asignar los objetos
     tabla.appendChild(tblBody);
     contenido.appendChild(tabla);
-
-    
-
     //ayuda()
 }
 
 //funcion para saber cuantas bombas hay al rededor de cada casilla
 function numerosCasillas(cantidadFilas, cantidadColumnas) {
     //total de bombas en la casilla a analizar
-    let total
+    let total;
     //variables para saber en que pocicion me encentro parado en la tabla
-    let columna=1
-    let fila=1
+    let columna=1;
+    let fila=1;
 
     for (let i=0; i < casillas.length; i++) {
         total=0;
@@ -143,15 +139,14 @@ function numerosCasillas(cantidadFilas, cantidadColumnas) {
             // Vemos si hay bomba en la casilla anterior de la fila siguiente
             if ((casillas[parseInt(i)+parseInt(cantidadFilas)-1]=="bomba") && (fila < cantidadFilas) && (columna!=1)) total++;
 
-            casillas[i]=total
+            casillas[i]=total;
         }
         //avanzo una posicion en la tabla
         columna++
         if (columna > cantidadColumnas){
-            fila++
-            columna=1
-        }
-        
+            fila++;
+            columna=1;
+        } 
     }
 }
 
@@ -169,28 +164,29 @@ function ayuda(){
 
 //funcion para eleguir que hacer dependiendo el modo (bandera o no)
 function pulsar(id){
+    let ubicacion = document.getElementById("casilla"+id);
     if (bandera==1){
-        cambiarBandera(id)
+        cambiarBandera(ubicacion);
     }
     else if (bandera==0){
         if (document.getElementById("casilla"+id).innerHTML==''){
-            revelar(id)
+            revelar(id);
         }
     }
     
 }
 
 //funcion para borrar y poner banderas
-function cambiarBandera(id){
-    let ubicacion = document.getElementById("casilla"+id)
+function cambiarBandera(ubicacion){
     if (ubicacion.innerHTML=='🚩'){
-        ubicacion.innerHTML=''
-        let posicionArray = casillaBandera.indexOf(id)
-        casillaBandera.splice(posicionArray)
+        ubicacion.innerHTML='';
+        let posicionArray = casillaBandera.indexOf(id);
+        casillaBandera.splice(posicionArray);
+        casillaBandera.sort();
     } 
     else {
         ubicacion.innerHTML='🚩'
-        casillaBandera.push(id)
+        casillaBandera.push(id);
         casillaBandera.sort();
     }
     audio("audioBandera")
@@ -198,33 +194,31 @@ function cambiarBandera(id){
         let verificar=0
         for (i = 0; i < casillaBandera.length; i++){
             if(casillaBandera[i]!=casillaBomba[i]){
-                verificar=1
+                verificar=1;
                 i=casillaBandera.length;
             }
         }
         if (verificar==0){
-            finDePartirda("victoria")
+            finDePartirda("victoria");
         }
-        
     }
 }
-
 
 //funcion para revelar casiila
 function revelar(id){
     let casilla = casillas[id]
-    let ubicacion = document.getElementById("casilla"+id)
+    let ubicacion = document.getElementById("casilla"+id);
     if (casilla == "bomba"){
         ubicacion.innerHTML='💣';
-        audio("audioBomba")
-        finDePartirda("derrota")
+        audio("audioBomba");
+        finDePartirda("derrota");
     }
     else{
-        ubicacion.innerHTML= casilla
-        casillasLibres[1]++
-        audio("audioClick")
+        ubicacion.innerHTML= casilla;
+        casillasLibres[1]++;
+        audio("audioClick");
         if (casillasLibres[0]<=casillasLibres[1]){
-            finDePartirda("victoria")
+            finDePartirda("victoria");
         }
     }
 }
@@ -247,12 +241,11 @@ function modoBandera(){
 }
 
 //funcion para terminar la partida
-function finDePartirda(tipo, ubicacion){
+function finDePartirda(tipo){
     var casillasA = document.getElementsByClassName("casillaA")
     for (let i = 0; i < casillas.length; i++){
         casillasA[i].removeAttribute("onclick")
     }
-    
     //esto es temporal
     if(tipo=="derrota"){
         for (let i = 0; i < casillas.length; i++){
