@@ -3,28 +3,55 @@ function getRandomArbitrary(min, max) {
     return Math.floor((Math.random() * (max - min + 1)) + min);
 }
 
-//funcion recuperar Variables de html
-function RecuperarMinas(){
-    let Ccolumna = document.getElementById("Ccolumnas").value
-    let Cfilas = document.getElementById("Cfilas").value
-    let Cminas = document.getElementById("Cminas").value
-    
-    if ((Ccolumna<=0) || (Cfilas<=0) || (Cminas<=0)){
-        alert("Ningun Valor puede ser 0 o menor")
-    }
-    else if(Cminas >= Ccolumna * Cfilas){
-        alert("No pueden haber mas minas que casillas")
-    }
-    else{
-        document.getElementById("TablaEntrada").setAttribute("hidden",true)
-        genera_tablaBM(Cfilas,Ccolumna,Cminas)
-    }
-    
-}
 let casillas  = new Array;
 let casillasLibres=[0,0]
 let casillaBandera = new Array;
 let casillaBomba = new Array;
+let Ccolumnas 
+let Cfilas
+let Cminas
+
+//funcion para crear nueva partida si se pulsa repetir juego
+window.onload = RecargarNuevaPartida()
+function RecargarNuevaPartida(){
+    Ccolumnas = sessionStorage.getItem("Ccolumnas")
+    Cfilas = sessionStorage.getItem("Cfilas")
+    Cminas = sessionStorage.getItem("Cminas")
+
+    sessionStorage.setItem("Cfilas", 0)
+    sessionStorage.setItem("Cminas", 0)
+    sessionStorage.setItem("Ccolumnas", 0)
+
+    //Guardo variables de la ultima partida
+    sessionStorage.setItem("UltCfilas", Ccolumnas)
+    sessionStorage.setItem("UltCminas", Cfilas)
+    sessionStorage.setItem("UltCcolumnas", Cminas)
+
+    if ((Ccolumnas>0) && (Cfilas>0) && (Cminas>0)){
+        document.getElementById("TablaEntrada").setAttribute("hidden",true)
+        genera_tablaBM(Cfilas,Ccolumnas,Cminas)
+    }
+}
+
+//funcion recuperar Variables de html
+function RecuperarMinas(){
+    Ccolumnas = document.getElementById("Ccolumnas").value
+    Cfilas = document.getElementById("Cfilas").value
+    Cminas = document.getElementById("Cminas").value
+    /*
+    if ((Ccolumnas<=0) || (Cfilas<=0) || (Cminas<=0)){
+        alert("Ningun Valor puede ser 0 o menor")
+    }
+    else if(Cminas >= Ccolumnas * Cfilas){
+        alert("No pueden haber mas minas que casillas")
+    }
+    else{
+        document.getElementById("TablaEntrada").setAttribute("hidden",true)
+        genera_tablaBM(Cfilas,Ccolumnas,Cminas)
+    }*/
+    document.getElementById("TablaEntrada").setAttribute("hidden",true)
+    genera_tablaBM(Cfilas,Ccolumnas,Cminas)
+}
 
 //funcion generar buscaminas
 function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
@@ -260,12 +287,70 @@ function finDePartirda(tipo, ubicacion){
                 document.getElementById("casilla"+i).innerHTML='💣';
             }
         }
-        alert("has perdido")
-        //window.location.reload()
+
+        Swal.fire({
+            title: 'Has Perdido',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Volver a Jugar',
+            denyButtonText: `Nueva Partida`,
+            cancelButtonText: `Ver Mapa`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //compruebo uno pq no puede seguir el sistema con un valor erroneo
+                if (document.getElementById("Ccolumnas").value == 0){
+                    sessionStorage.setItem("Ccolumnas", sessionStorage.getItem("UltCfilas", Ccolumnas))
+                    sessionStorage.setItem("Cfilas", sessionStorage.getItem("UltCminas", Cfilas))
+                    sessionStorage.setItem("Cminas", sessionStorage.getItem("UltCcolumnas", Cminas))
+                    window.location.reload()
+                }
+                else {
+                    Cfilas = document.getElementById("Cfilas").value
+                    Cminas = document.getElementById("Cminas").value
+                    Ccolumnas = document.getElementById("Ccolumnas").value
+                }
+                sessionStorage.setItem("Ccolumnas", Ccolumnas)
+                sessionStorage.setItem("Cfilas", Cfilas)
+                sessionStorage.setItem("Cminas", Cminas)
+                window.location.reload()
+                
+            } else if (result.isDenied) {
+                window.location.reload()
+            }
+        })
     }
     else if (tipo=="victoria"){
         audio("audioVictoria")
-        alert("has ganado")
+        Swal.fire({
+            title: 'Has Ganado',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Volver a Jugar',
+            denyButtonText: `Nueva Partida`,
+            cancelButtonText: `Ver Mapa`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //compruebo uno pq no puede seguir el sistema con un valor erroneo
+                if (document.getElementById("Ccolumnas").value == 0){
+                    sessionStorage.setItem("Ccolumnas", sessionStorage.getItem("UltCfilas", Ccolumnas))
+                    sessionStorage.setItem("Cfilas", sessionStorage.getItem("UltCminas", Cfilas))
+                    sessionStorage.setItem("Cminas", sessionStorage.getItem("UltCcolumnas", Cminas))
+                    window.location.reload()
+                }
+                else {
+                    Cfilas = document.getElementById("Cfilas").value
+                    Cminas = document.getElementById("Cminas").value
+                    Ccolumnas = document.getElementById("Ccolumnas").value
+                }
+                sessionStorage.setItem("Ccolumnas", Ccolumnas)
+                sessionStorage.setItem("Cfilas", Cfilas)
+                sessionStorage.setItem("Cminas", Cminas)
+                window.location.reload()
+                
+            } else if (result.isDenied) {
+                window.location.reload()
+            }
+        })
         for (let i = 0; i < casillas.length; i++){
             if (casillas[i] == "bomba"){
                 document.getElementById("casilla"+i).innerHTML='🚩';
