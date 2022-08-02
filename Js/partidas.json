@@ -1,0 +1,8 @@
+
+[
+    {"dificultad":"Muy Facil", "columnas":8,"filas":8,"minas":10},
+    {"dificultad":"Facil", "columnas":10,"filas":10,"minas":16},
+    {"dificultad":"Media", "columnas":15,"filas":15,"minas":40},
+    {"dificultad":"Dificil", "columnas":20,"filas":20,"minas":80},
+    {"dificultad":"Muy Dificil", "columnas":30,"filas":30,"minas":200}
+]

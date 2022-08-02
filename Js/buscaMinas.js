@@ -38,24 +38,28 @@ function RecuperarMinas(){
     Ccolumnas = document.getElementById("Ccolumnas").value
     Cfilas = document.getElementById("Cfilas").value
     Cminas = document.getElementById("Cminas").value
-    /*
     if ((Ccolumnas<=0) || (Cfilas<=0) || (Cminas<=0)){
-        alert("Ningun Valor puede ser 0 o menor")
+        Swal.fire(
+            'No se puede Generar esta Partida',
+            'Ningun Valor puede ser 0 o menor',
+            'question'
+        )
     }
     else if(Cminas >= Ccolumnas * Cfilas){
-        alert("No pueden haber mas minas que casillas")
+        Swal.fire(
+            'No se puede Generar esta partida',
+            'Tienen que haber menos Minas que Casillas',
+            'question'
+        )
     }
     else{
-        document.getElementById("TablaEntrada").setAttribute("hidden",true)
         genera_tablaBM(Cfilas,Ccolumnas,Cminas)
-    }*/
-    document.getElementById("TablaEntrada").setAttribute("hidden",true)
-    genera_tablaBM(Cfilas,Ccolumnas,Cminas)
+    }
 }
 
 //funcion generar buscaminas
 function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
-
+    document.getElementById("TablaEntrada").setAttribute("hidden",true)
     // seteo variables
     let contenido = document.getElementById("content");
     let tabla   = document.createElement("table");
@@ -70,7 +74,7 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
     }
     casillasLibres[0]=casillas.length-cantidadMinas
 
-    if (casillas.length >= cantidadMinas){
+    if (casillas.length > cantidadMinas){
         //random minas
         for (let i = 0, ramdom=0; i < cantidadMinas; i++){
             ramdom=getRandomArbitrary(0,casillas.length-1)
@@ -368,3 +372,21 @@ function audio(id){
         sonido.currentTime = 0
     }
 }
+
+fetch('../Js/partidas.json')
+.then((response) => response.json())
+.then((data) => {
+    const ubicacion = document.getElementById("partidasPrearmadas")
+    data.forEach(valor => {
+        
+        let td = document.createElement("td");
+        let boton = document.createElement("buttom");
+        
+        boton.setAttribute("type","button");
+        
+        boton.setAttribute("onclick","genera_tablaBM(" + `${valor.filas}` + "," + `${valor.columnas}` + "," + `${valor.minas}` + ")");
+        boton.innerHTML = `${valor.dificultad}`;
+        td.appendChild(boton);
+        ubicacion.appendChild(td);
+    });
+})

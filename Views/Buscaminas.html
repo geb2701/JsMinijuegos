@@ -7,7 +7,6 @@
     <title>Busca Minas</title>
     <link rel="stylesheet" href="../Assets/Css/bootstrap.css">
     <link rel="stylesheet" href="../Assets/Css/Style.css">
-    <link rel="stylesheet" href="sweetalert2.min.css">
 </head>
 
 <body>
@@ -53,28 +52,36 @@
                 <source type="audio/wav" src="/Assets/Sounds/Bm/CambioBandera.wav">
             </audio>
         </div>
-        <table id="TablaEntrada">
-            <tr>
-                <td>
-                    <b>Columnas:<input type="number" min="0" id="Ccolumnas" value="0"></b>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <b>Filas:<input type="number" min="0" id="Cfilas" value="0"></b>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <b>Minas:<input type="number" min="0" id="Cminas" value="0"></b>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button type="button" onclick="RecuperarMinas()">Empezar</button>
-                </td>
-            </tr>
-        </table>
+        <div id="TablaEntrada">
+            <table>
+                <tr>
+                    <td>
+                        <b>Columnas:<input type="number" min="0" id="Ccolumnas" value="0"></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Filas:<input type="number" min="0" id="Cfilas" value="0"></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Minas:<input type="number" min="0" id="Cminas" value="0"></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" onclick="RecuperarMinas()">Empezar</button>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr id="partidasPrearmadas">
+
+                </tr>
+            </table>
+        </div>
+        
         <div id="content">
             <a onclick="modoBandera()" class="cajaBandera cajaBanderaNoSeleccionada" id="cajaBandera" hidden>            
                 🚩
@@ -90,7 +97,6 @@
     </footer>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="sweetalert2.min.js"></script>
     <script src="../Js/buscaMinas.js"></script>
     <script src="../Js/bootstrap.js"></script>
 </body>
