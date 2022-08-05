@@ -132,3 +132,7 @@
 .tablaEstadisticas-3 td {
   width: 200px;
 }
+
+.dato {
+  color: red;
+}
