@@ -4,28 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Assets/Css/bootstrap.css">
-    <link rel="stylesheet" href="Assets/Css/Style.css">
+    <title>Busca Minas</title>
+    <link rel="stylesheet" href="./Assets/Css/bootstrap.css">
+    <link rel="stylesheet" href="./Assets/Css/Style.css">
 </head>
 
 <body>
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><img src="Assets/Img/Logo.png" class="logo"></a>
+                <a class="navbar-brand" href="#"><img src="./Assets/Img/Logo.png" class="logo"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="./index.html">Home</a>
+                            <a class="nav-link active" aria-current="page" href="/index.html">Busca Minas</a>
                         </li>
                         <li class="nav-item">
-                        <a class="nav-link" href="./Views/Buscaminas.html">Busca Minas</a>
-                        </li>
-                        <li class="nav-item">
-                        <a class="nav-link" href="./Views/Ajedrez.html">Ajedrez</a>
+                            <a class="nav-link" href="./Views/Estadisticas.html">Estadisticas</a>
                         </li>
                     </ul>
                 </div>
@@ -34,19 +32,140 @@
     </header>
 
     <main class="main-content">
-        
-        <div id="content">
-
+        <div style="display: none;">
+            <audio id="audioInicio" controls>
+                <source type="audio/wav" src="/Assets/Sounds/Inicio.wav">
+            </audio>
+            <audio id="audioBomba" controls>
+                <source type="audio/wav" src="/Assets/Sounds/Bomb.wav">
+            </audio>
+            <audio id="audioClick" controls>
+                <source type="audio/wav" src="/Assets/Sounds/Click.wav">
+            </audio>
+            <audio id="audioVictoria" controls>
+                <source type="audio/wav" src="/Assets/Sounds/Victoria.wav">
+            </audio>
+            <audio id="audioBandera" controls>
+                <source type="audio/wav" src="/Assets/Sounds/Bandera.wav">
+            </audio>
+            <audio id="audioBCambio" controls>
+                <source type="audio/wav" src="/Assets/Sounds/CambioBandera.wav">
+            </audio>
+        </div>
+        <div class="centrar">
+            <div id="TablaEntrada">
+                
+                <table class="centrar">
+                    <tr>
+                        <td colspan="2" align="center">
+                            <h1>BUSCA MINAS</h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center">
+                            <h2>CREAR PARTIDA</h2>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Columnas:</b>
+                        </td>
+                        <td>
+                            <input type="number" min="0" id="Ccolumnas" value="0">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Filas:</b>
+                        </td>
+                        <td>
+                            <input type="number" min="0" id="Cfilas" value="0">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Minas:</b>
+                        </td>
+                        <td>
+                            <input type="number" min="0" id="Cminas" value="0">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center">
+                            <button type="button" onclick="RecuperarMinas()" class="btnBM">Empezar</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center">
+                            <h2>PARTIDA POR DIFICULTAD</h2>
+                        </td>
+                    </tr>
+                </table>
+                <table>
+                    <tr id="partidasPrearmadas">
+                        
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div>
+            <div id="EstadisticasPartida" class="centrar">
+                <div>
+                    <table class="tablaEstadisticas">
+                        <tr>
+                            <td align="center">
+                                <h1>BUSCA MINAS</h1>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="tablaEstadisticas">
+                        <tr class="tablaEstadisticas-2">
+                            <td >
+                                <b>Tiempo:</b><b id="tiempo"></b>
+                            </td>
+                            <td>
+                                <b>Casillas Restantes:</b><b id="casillasRestantes"></b>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="tablaEstadisticas">
+                        <tr class="tablaEstadisticas-3">
+                            <td>
+                                <b>Columnas:</b><b id="columnas"></b>
+                            </td>
+                            <td >
+                                <b>Filas:</b><b id="filas"></b>
+                            </td>
+                            <td >
+                                <b>Minas:</b><b id="minas"></b>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div style="position: fixed;">
+                <a onclick="modoBandera()" class="cajaBandera cajaBanderaNoSeleccionada" id="cajaBandera" hidden>            
+                    🚩
+                </a>
+                <div style="height: 6px;"></div>
+                <a onclick="reiniciar()" class="cajaReiniciar" id="cajaReiniciar" hidden>            
+                    ➕
+                </a>
+            </div>
+            <div id="content" class="centrar">
+            
+            </div>
         </div>
     </main>
 
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
         <div class="col-md-4 d-flex align-items-center ps-3">
-          <span class="text-muted">Mini Juegos</span>
+          <span class="text-muted">Busca Minas</span>
         </div>
     </footer>
 
-    <script src="./Js/functions.js"></script>
-    <script src="./Js/bootstrap.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/Js/buscaMinas.js"></script>
+    <script src="/Js/bootstrap.js"></script>
 </body>
 </html>

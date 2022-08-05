@@ -10,6 +10,11 @@ let casillaBomba = new Array;
 let Ccolumnas 
 let Cfilas
 let Cminas
+let segundo=0
+let minuto=0
+let hora=0
+let cronometro
+let tiempoTexto
 
 //funcion para crear nueva partida si se pulsa repetir juego
 window.onload = RecargarNuevaPartida()
@@ -65,6 +70,7 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
     let tabla   = document.createElement("table");
     let tblBody = document.createElement("tbody");
     document.getElementById("cajaBandera").removeAttribute("hidden")
+    document.getElementById("cajaReiniciar").removeAttribute("hidden")
     //clase a la tabla
     tabla.setAttribute("class", "tableBM");
     
@@ -74,26 +80,19 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
     }
     casillasLibres[0]=casillas.length-cantidadMinas
 
-    if (casillas.length > cantidadMinas){
-        //random minas
-        for (let i = 0, ramdom=0; i < cantidadMinas; i++){
-            ramdom=getRandomArbitrary(0,casillas.length-1)
-            if (casillas[ramdom] == "bomba"){
-                i--
-            }
-            else{
-                casillas[ramdom]="bomba";
-                casillaBomba.push(ramdom)
-            }
-            
+    //random minas
+    for (let i = 0, ramdom=0; i < cantidadMinas; i++){
+        ramdom=getRandomArbitrary(0,casillas.length-1)
+        if (casillas[ramdom] == "bomba"){
+            i--
         }
-        casillaBomba.sort();
+        else{
+            casillas[ramdom]="bomba";
+            casillaBomba.push(ramdom)
+        }
+        
     }
-    // evitar for infinito
-    else{
-        alert("Partida Imposible")
-    }
- 
+    casillaBomba.sort();
     //funcion para saber cantidad de bombas al aldo de cada casilla
     numerosCasillas(cantidadFilas, cantidadColumnas)
 
@@ -106,20 +105,8 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
             let celda = document.createElement("td");
             let botonCelda = document.createElement("a");
             let contenidoCelda = document.createElement("div");
-
-            //estilo temporal para programar
-            /*if (casillas[i*cantidadColumnas+j]=="bomba"){
-                //botonCelda.setAttribute("href", 'javascript:alert("Bomba")');
-                contenidoCelda.setAttribute("class", "BombaBM");
-            }
-            else{
-                //botonCelda.setAttribute("href", 'javascript:alert("'+ casillas[i*cantidadColumnas+j] +'")');
-                contenidoCelda.setAttribute("class", "casillaBM");
-            }*/
-
-            contenidoCelda.setAttribute("class", "casillaBM");
-
             //asignar los objetos
+            contenidoCelda.setAttribute("class", "casillaBM");
             botonCelda.setAttribute("class", "casillaA");
             botonCelda.setAttribute("onclick", 'javascript:pulsar(' + (i*cantidadColumnas+j) + ')');
             contenidoCelda.setAttribute("id", "casilla"+(i*cantidadColumnas+j));
@@ -133,10 +120,17 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
     //asignar los objetos
     tabla.appendChild(tblBody);
     contenido.appendChild(tabla);
-
-    
-
-    //ayuda()
+    //detecto el tamaño de la pantalla
+    if (tabla.clientWidth + 44 >= screen.width){
+        contenido.removeAttribute("class")
+    }
+    audio("audioInicio")
+    iniciarTimer()
+    //añadir info de la partida
+    document.getElementById('columnas').innerHTML = cantidadColumnas;
+    document.getElementById('filas').innerHTML = cantidadFilas;
+    document.getElementById('minas').innerHTML = cantidadMinas;
+    document.getElementById("casillasRestantes").innerHTML=  casillasLibres[0] - casillasLibres[1]
 }
 
 //funcion para saber cuantas bombas hay al rededor de cada casilla
@@ -186,18 +180,6 @@ function numerosCasillas(cantidadFilas, cantidadColumnas) {
     }
 }
 
-//funcion para dar una ayuda al jugador
-function ayuda(){
-    let ayuda  = new Array;
-    for (let i=1; i < 9; i++){
-        ayuda[0]=casillas.filter(element => element == i);
-        ayuda[i]=ayuda[0].length;
-        if(ayuda[i]!=0){
-            console.log("Hay " + ayuda[i] + " casillas con "  + i + " bombas a su alrededor");
-        }
-    }
-}
-
 //funcion para eleguir que hacer dependiendo el modo (bandera o no)
 function pulsar(id){
     if (bandera==1){
@@ -206,6 +188,10 @@ function pulsar(id){
     else if (bandera==0){
         if (document.getElementById("casilla"+id).innerHTML==''){
             revelar(id)
+        }
+        //no verifico si es bomba porque si lo fuera la partida acabaria
+        else if (document.getElementById("casilla"+id).innerHTML!='🚩'){
+            dobleClick(id)
         }
     }
     
@@ -225,21 +211,7 @@ function cambiarBandera(id){
         casillaBandera.sort();
     }
     audio("audioBandera")
-    if (casillaBandera.length==casillaBomba.length){
-        let verificar=0
-        for (i = 0; i < casillaBandera.length; i++){
-            if(casillaBandera[i]!=casillaBomba[i]){
-                verificar=1
-                i=casillaBandera.length;
-            }
-        }
-        if (verificar==0){
-            finDePartirda("victoria")
-        }
-        
-    }
 }
-
 
 //funcion para revelar casiila
 function revelar(id){
@@ -257,7 +229,12 @@ function revelar(id){
         if (casillasLibres[0]<=casillasLibres[1]){
             finDePartirda("victoria")
         }
+        document.getElementById("casillasRestantes").innerHTML=  casillasLibres[0] - casillasLibres[1]
     }
+}
+
+function dobleClick(id){
+    alert("hola")
 }
 
 //funcion para cambiar el modo para insertar o no las banderas
@@ -277,13 +254,73 @@ function modoBandera(){
     }
 }
 
+//funciones para el coronometro
+function iniciarTimer() {
+    cronometro = setInterval(function() { timer() }, 1000);
+}
+
+function timer() {
+    segundo++
+    if (segundo==60){
+        minuto++
+        segundo=0
+        if (minuto==60){
+            hora++
+            minuto=0
+        }
+    }
+    //escribo el tiempo
+    if(hora!=0){
+        if (minuto<10){
+            if(segundo<10){
+                tiempoTexto = hora +":0" + minuto + ":0" + segundo
+            }
+            else{
+                tiempoTexto = hora + ":0" + minuto + ":" + segundo
+            }
+        }
+        else{
+            if(segundo<10){
+                tiempoTexto = hora + ":" +minuto + ":0" + segundo
+            }
+            else{
+                tiempoTexto = hora + ":" +minuto + ":" + segundo
+            }
+        }
+    }
+    else{
+        if (minuto<10){
+            if(segundo<10){
+                tiempoTexto = "0" + minuto + ":0" + segundo
+            }
+            else{
+                tiempoTexto = "0" + minuto + ":" + segundo
+            }
+        }
+        else{
+            if(segundo<10){
+                tiempoTexto = minuto + ":0" + segundo
+            }
+            else{
+                tiempoTexto = minuto + ":" + segundo
+            }
+        }
+    }
+    
+    document.getElementById('tiempo').innerHTML = tiempoTexto;
+}
+
+function stopTimer() {
+    clearInterval(cronometro);
+}
+
 //funcion para terminar la partida
-function finDePartirda(tipo, ubicacion){
+function finDePartirda(tipo){
     var casillasA = document.getElementsByClassName("casillaA")
     for (let i = 0; i < casillas.length; i++){
         casillasA[i].removeAttribute("onclick")
     }
-    
+    stopTimer()
     //esto es temporal
     if(tipo=="derrota"){
         for (let i = 0; i < casillas.length; i++){
@@ -363,6 +400,40 @@ function finDePartirda(tipo, ubicacion){
     }
 }
 
+function reiniciar(){
+    Swal.fire({
+        title: '¿Deseas Reinicar la Partida?',
+        icon:'question',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Reiniciar Partida',
+        denyButtonText: `Nueva Partida`,
+        cancelButtonText: `Continuar`,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            //compruebo uno pq no puede seguir el sistema con un valor erroneo
+            if (document.getElementById("Ccolumnas").value == 0){
+                sessionStorage.setItem("Ccolumnas", sessionStorage.getItem("UltCfilas", Ccolumnas))
+                sessionStorage.setItem("Cfilas", sessionStorage.getItem("UltCminas", Cfilas))
+                sessionStorage.setItem("Cminas", sessionStorage.getItem("UltCcolumnas", Cminas))
+                window.location.reload()
+            }
+            else {
+                Cfilas = document.getElementById("Cfilas").value
+                Cminas = document.getElementById("Cminas").value
+                Ccolumnas = document.getElementById("Ccolumnas").value
+            }
+            sessionStorage.setItem("Ccolumnas", Ccolumnas)
+            sessionStorage.setItem("Cfilas", Cfilas)
+            sessionStorage.setItem("Cminas", Cminas)
+            window.location.reload()
+            
+        } else if (result.isDenied) {
+            window.location.reload()
+        }
+    })
+}
+
 //funcion reproducir sonido
 function audio(id){
     sonido =  document.getElementById(id);
@@ -373,6 +444,7 @@ function audio(id){
     }
 }
 
+//recuperar dificultades del json
 fetch('../Js/partidas.json')
 .then((response) => response.json())
 .then((data) => {
@@ -383,10 +455,14 @@ fetch('../Js/partidas.json')
         let boton = document.createElement("buttom");
         
         boton.setAttribute("type","button");
-        
+        boton.setAttribute("class","btnBM");
         boton.setAttribute("onclick","genera_tablaBM(" + `${valor.filas}` + "," + `${valor.columnas}` + "," + `${valor.minas}` + ")");
         boton.innerHTML = `${valor.dificultad}`;
         td.appendChild(boton);
         ubicacion.appendChild(td);
     });
 })
+
+
+
+
