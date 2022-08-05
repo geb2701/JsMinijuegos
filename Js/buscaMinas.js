@@ -27,14 +27,9 @@ function RecargarNuevaPartida(){
     sessionStorage.setItem("Cminas", 0)
     sessionStorage.setItem("Ccolumnas", 0)
 
-    //Guardo variables de la ultima partida
-    sessionStorage.setItem("UltCfilas", Ccolumnas)
-    sessionStorage.setItem("UltCminas", Cfilas)
-    sessionStorage.setItem("UltCcolumnas", Cminas)
-
     if ((Ccolumnas>0) && (Cfilas>0) && (Cminas>0)){
         document.getElementById("TablaEntrada").setAttribute("hidden",true)
-        genera_tablaBM(Cfilas,Ccolumnas,Cminas)
+        generar_tablero()
     }
 }
 
@@ -58,12 +53,19 @@ function RecuperarMinas(){
         )
     }
     else{
-        genera_tablaBM(Cfilas,Ccolumnas,Cminas)
+        generar_tablero()
     }
 }
 
+function generarPartida(filas,columnas,minas){
+    Ccolumnas = filas
+    Cfilas = columnas
+    Cminas = minas
+    generar_tablero()
+}
+
 //funcion generar buscaminas
-function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
+function generar_tablero() {
     document.getElementById("TablaEntrada").setAttribute("hidden",true)
     // seteo variables
     let contenido = document.getElementById("content");
@@ -75,13 +77,13 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
     tabla.setAttribute("class", "tableBM");
     
     //genero casillas
-    for (let i = 0; i < cantidadFilas * cantidadColumnas; i++){
+    for (let i = 0; i < Cfilas * Ccolumnas; i++){
         casillas[i]="vacio";
     }
-    casillasLibres[0]=casillas.length-cantidadMinas
+    casillasLibres[0]=casillas.length-Cminas
 
     //random minas
-    for (let i = 0, ramdom=0; i < cantidadMinas; i++){
+    for (let i = 0, ramdom=0; i < Cminas; i++){
         ramdom=getRandomArbitrary(0,casillas.length-1)
         if (casillas[ramdom] == "bomba"){
             i--
@@ -94,13 +96,13 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
     }
     casillaBomba.sort();
     //funcion para saber cantidad de bombas al aldo de cada casilla
-    numerosCasillas(cantidadFilas, cantidadColumnas)
+    numerosCasillas()
 
     //añadir filas y columnas
-    for (let i = 0; i < cantidadFilas; i++) {
+    for (let i = 0; i < Cfilas; i++) {
         //crear fila
         let fila = document.createElement("tr");
-        for (let j = 0; j < cantidadColumnas; j++) {
+        for (let j = 0; j < Ccolumnas; j++) {
             //crear columna
             let celda = document.createElement("td");
             let botonCelda = document.createElement("a");
@@ -108,8 +110,8 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
             //asignar los objetos
             contenidoCelda.setAttribute("class", "casillaBM");
             botonCelda.setAttribute("class", "casillaA");
-            botonCelda.setAttribute("onclick", 'javascript:pulsar(' + (i*cantidadColumnas+j) + ')');
-            contenidoCelda.setAttribute("id", "casilla"+(i*cantidadColumnas+j));
+            botonCelda.setAttribute("onclick", 'javascript:pulsar(' + (i*Ccolumnas+j) + ')');
+            contenidoCelda.setAttribute("id", "casilla"+(i*Ccolumnas+j));
             botonCelda.appendChild(contenidoCelda);
             celda.appendChild(botonCelda);
             fila.appendChild(celda);
@@ -127,14 +129,14 @@ function genera_tablaBM(cantidadFilas, cantidadColumnas, cantidadMinas) {
     audio("audioInicio")
     iniciarTimer()
     //añadir info de la partida
-    document.getElementById('columnas').innerHTML = cantidadColumnas;
-    document.getElementById('filas').innerHTML = cantidadFilas;
-    document.getElementById('minas').innerHTML = cantidadMinas;
+    document.getElementById('columnas').innerHTML = Ccolumnas;
+    document.getElementById('filas').innerHTML = Cfilas;
+    document.getElementById('minas').innerHTML = Cminas;
     document.getElementById("casillasRestantes").innerHTML=  casillasLibres[0] - casillasLibres[1]
 }
 
 //funcion para saber cuantas bombas hay al rededor de cada casilla
-function numerosCasillas(cantidadFilas, cantidadColumnas) {
+function numerosCasillas() {
     //total de bombas en la casilla a analizar
     let total
     //variables para saber en que pocicion me encentro parado en la tabla
@@ -148,31 +150,31 @@ function numerosCasillas(cantidadFilas, cantidadColumnas) {
             if ((casillas[i-1]=="bomba") && (columna!=1))total++;
             
             // Vemos si hay bomba en la casilla siguiente
-            if (casillas[i+1]=="bomba" && (columna < cantidadColumnas))total++;
+            if (casillas[i+1]=="bomba" && (columna < Ccolumnas))total++;
 
             // Vemos si hay bomba en la casilla superior
-            if ((casillas[i-cantidadFilas]=="bomba")  && (fila!=1)) total++;
+            if ((casillas[i-Cfilas]=="bomba")  && (fila!=1)) total++;
 
             // Vemos si hay bomba en la casilla siguiente de la fila anterior
-            if ((casillas[(i-cantidadFilas) +1]=="bomba") && (fila!=1) && (columna < cantidadColumnas)) total++;
+            if ((casillas[(i-Cfilas) +1]=="bomba") && (fila!=1) && (columna < Ccolumnas)) total++;
 
             // Vemos si hay bomba en la casilla anterior de la fila anterior
-            if ((casillas[(i-cantidadFilas)-1]=="bomba") && (fila!=1) && (columna!=1)) total++;
+            if ((casillas[(i-Cfilas)-1]=="bomba") && (fila!=1) && (columna!=1)) total++;
 
             // Vemos si hay bomba en la casilla inferior
-            if ((casillas[parseInt(i)+parseInt(cantidadFilas)]=="bomba") && (fila < cantidadFilas)) total++;
+            if ((casillas[parseInt(i)+parseInt(Cfilas)]=="bomba") && (fila < Cfilas)) total++;
 
             // Vemos si hay bomba en la casilla siguiente de la fila siguiente
-            if ((casillas[parseInt(i) + parseInt(cantidadFilas) +1]=="bomba") && (fila < cantidadFilas) && (columna < cantidadColumnas)) total++;
+            if ((casillas[parseInt(i) + parseInt(Cfilas) +1]=="bomba") && (fila < Cfilas) && (columna < Ccolumnas)) total++;
             
             // Vemos si hay bomba en la casilla anterior de la fila siguiente
-            if ((casillas[parseInt(i)+parseInt(cantidadFilas)-1]=="bomba") && (fila < cantidadFilas) && (columna!=1)) total++;
+            if ((casillas[parseInt(i)+parseInt(Cfilas)-1]=="bomba") && (fila < Cfilas) && (columna!=1)) total++;
 
             casillas[i]=total
         }
         //avanzo una posicion en la tabla
         columna++
-        if (columna > cantidadColumnas){
+        if (columna > Ccolumnas){
             fila++
             columna=1
         }
@@ -232,7 +234,6 @@ function revelar(id){
         document.getElementById("casillasRestantes").innerHTML=  casillasLibres[0] - casillasLibres[1]
     }
 }
-
 function dobleClick(id){
     alert("hola")
 }
@@ -338,18 +339,6 @@ function finDePartirda(tipo){
             cancelButtonText: `Ver Mapa`,
         }).then((result) => {
             if (result.isConfirmed) {
-                //compruebo uno pq no puede seguir el sistema con un valor erroneo
-                if (document.getElementById("Ccolumnas").value == 0){
-                    sessionStorage.setItem("Ccolumnas", sessionStorage.getItem("UltCfilas", Ccolumnas))
-                    sessionStorage.setItem("Cfilas", sessionStorage.getItem("UltCminas", Cfilas))
-                    sessionStorage.setItem("Cminas", sessionStorage.getItem("UltCcolumnas", Cminas))
-                    window.location.reload()
-                }
-                else {
-                    Cfilas = document.getElementById("Cfilas").value
-                    Cminas = document.getElementById("Cminas").value
-                    Ccolumnas = document.getElementById("Ccolumnas").value
-                }
                 sessionStorage.setItem("Ccolumnas", Ccolumnas)
                 sessionStorage.setItem("Cfilas", Cfilas)
                 sessionStorage.setItem("Cminas", Cminas)
@@ -371,18 +360,6 @@ function finDePartirda(tipo){
             cancelButtonText: `Ver Mapa`,
         }).then((result) => {
             if (result.isConfirmed) {
-                //compruebo uno pq no puede seguir el sistema con un valor erroneo
-                if (document.getElementById("Ccolumnas").value == 0){
-                    sessionStorage.setItem("Ccolumnas", sessionStorage.getItem("UltCfilas", Ccolumnas))
-                    sessionStorage.setItem("Cfilas", sessionStorage.getItem("UltCminas", Cfilas))
-                    sessionStorage.setItem("Cminas", sessionStorage.getItem("UltCcolumnas", Cminas))
-                    window.location.reload()
-                }
-                else {
-                    Cfilas = document.getElementById("Cfilas").value
-                    Cminas = document.getElementById("Cminas").value
-                    Ccolumnas = document.getElementById("Ccolumnas").value
-                }
                 sessionStorage.setItem("Ccolumnas", Ccolumnas)
                 sessionStorage.setItem("Cfilas", Cfilas)
                 sessionStorage.setItem("Cminas", Cminas)
@@ -398,6 +375,44 @@ function finDePartirda(tipo){
             }
         }
     }
+    guardarInfo(tipo)
+}
+
+function guardarInfo(tipo){
+    let cas, par, vic, der
+    if ((localStorage.getItem("casillas")!== null)&&(localStorage.getItem("casillas")!== NaN)){
+        cas = localStorage.getItem("casillas") + casillasLibres[1]
+    }
+    else{
+        cas = casillasLibres[1]
+    }
+    if ((localStorage.getItem("partidasJugadas")!== null) && (localStorage.getItem("partidasJugadas")!== NaN)){
+        par = localStorage.getItem("partidasJugadas") + 1
+    }
+    else{
+        par = 1
+    }
+    if ((localStorage.getItem("victoria")!== null) && (localStorage.getItem("victoria")!== NaN)){
+        vic = localStorage.getItem("victoria") +1
+    }
+    else{
+        vic = 1
+    }
+    if ((localStorage.getItem("derrota")!== null) && (localStorage.getItem("derrota")!== NaN)){
+        der = localStorage.getItem("derrota")+1
+    }
+    else{
+        der = 1
+    }
+
+    localStorage.setItem("casillas", cas)
+    localStorage.setItem("partidasJugadas",  par)
+    if(tipo=="derrota"){
+        localStorage.setItem("derrota", der)
+    }
+    if(tipo=="victoria"){
+        localStorage.setItem("victoria",  vic)
+    }
 }
 
 function reiniciar(){
@@ -411,18 +426,6 @@ function reiniciar(){
         cancelButtonText: `Continuar`,
     }).then((result) => {
         if (result.isConfirmed) {
-            //compruebo uno pq no puede seguir el sistema con un valor erroneo
-            if (document.getElementById("Ccolumnas").value == 0){
-                sessionStorage.setItem("Ccolumnas", sessionStorage.getItem("UltCfilas", Ccolumnas))
-                sessionStorage.setItem("Cfilas", sessionStorage.getItem("UltCminas", Cfilas))
-                sessionStorage.setItem("Cminas", sessionStorage.getItem("UltCcolumnas", Cminas))
-                window.location.reload()
-            }
-            else {
-                Cfilas = document.getElementById("Cfilas").value
-                Cminas = document.getElementById("Cminas").value
-                Ccolumnas = document.getElementById("Ccolumnas").value
-            }
             sessionStorage.setItem("Ccolumnas", Ccolumnas)
             sessionStorage.setItem("Cfilas", Cfilas)
             sessionStorage.setItem("Cminas", Cminas)
@@ -456,7 +459,7 @@ fetch('../Js/partidas.json')
         
         boton.setAttribute("type","button");
         boton.setAttribute("class","btnBM");
-        boton.setAttribute("onclick","genera_tablaBM(" + `${valor.filas}` + "," + `${valor.columnas}` + "," + `${valor.minas}` + ")");
+        boton.setAttribute("onclick","generarPartida(" + `${valor.filas}` + "," + `${valor.columnas}` + "," + `${valor.minas}` + ")");
         boton.innerHTML = `${valor.dificultad}`;
         td.appendChild(boton);
         ubicacion.appendChild(td);
