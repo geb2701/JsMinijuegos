@@ -1,5 +1,6 @@
 let datos = [["cPartidas","partidasJugadas"],["casillasCorrectas","casillas"],["cVictoria","victoria"],["cDerrota","derrota"]]
 
+//funcion para escribir el texto en la pantalla
 function recuperarEstadisticas(){
     datos.forEach(element => {
         if ((localStorage.getItem(element[1])!== null) && (localStorage.getItem(element[1])!== NaN)){
@@ -11,6 +12,7 @@ function recuperarEstadisticas(){
     }); 
 }
 
+//funcion para reiniciar las estadisticas
 function Reiniciar(){
     localStorage.clear()
     datos.forEach(element => {
@@ -19,4 +21,5 @@ function Reiniciar(){
     recuperarEstadisticas()
 }
 
+//lo ejecutamos al comenzar
 window.onload = recuperarEstadisticas()

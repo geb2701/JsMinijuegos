@@ -1,8 +1,4 @@
-//funcion ramdom con minimo maximo
-function getRandomArbitrary(min, max) {
-    return Math.floor((Math.random() * (max - min + 1)) + min);
-}
-
+//variables para las funciones
 let casillas  = new Array;
 let casillasLibres=[0,0]
 let casillaBandera = new Array;
@@ -57,6 +53,7 @@ function RecuperarMinas(){
     }
 }
 
+//funcion para establecer las variables antes de iniciar la partida, se usa con los botones que toman partidas preaarmadas
 function generarPartida(filas,columnas,minas){
     Ccolumnas = filas
     Cfilas = columnas
@@ -94,6 +91,7 @@ function generar_tablero() {
         }
         
     }
+    //ordenamos el array
     casillaBomba.sort();
     //funcion para saber cantidad de bombas al aldo de cada casilla
     numerosCasillas()
@@ -102,12 +100,13 @@ function generar_tablero() {
     for (let i = 0; i < Cfilas; i++) {
         //crear fila
         let fila = document.createElement("tr");
+        //crear columna
         for (let j = 0; j < Ccolumnas; j++) {
-            //crear columna
+            //crear los elementos
             let celda = document.createElement("td");
             let botonCelda = document.createElement("a");
             let contenidoCelda = document.createElement("div");
-            //asignar los objetos
+            //asignar los elemntos
             contenidoCelda.setAttribute("class", "casillaBM");
             botonCelda.setAttribute("class", "casillaA");
             botonCelda.setAttribute("onclick", 'javascript:pulsar(' + (i*Ccolumnas+j) + ')');
@@ -116,10 +115,10 @@ function generar_tablero() {
             celda.appendChild(botonCelda);
             fila.appendChild(celda);
         }
-        //asignar los objetos
+        //asignar los elementos
         tblBody.appendChild(fila);
     }
-    //asignar los objetos
+    //asignar los elementos
     tabla.appendChild(tblBody);
     contenido.appendChild(tabla);
     //detecto el tamaño de la pantalla
@@ -134,6 +133,12 @@ function generar_tablero() {
     document.getElementById('minas').innerHTML = Cminas;
     document.getElementById("casillasRestantes").innerHTML=  casillasLibres[0] - casillasLibres[1]
 }
+
+//funcion ramdom con minimo maximo
+function getRandomArbitrary(min, max) {
+    return Math.floor((Math.random() * (max - min + 1)) + min);
+}
+
 
 //funcion para saber cuantas bombas hay al rededor de cada casilla
 function numerosCasillas() {
@@ -249,10 +254,11 @@ function modoBandera(){
 }
 
 //funciones para el coronometro
+//Establecer tiempo y lo inicia
 function iniciarTimer() {
     cronometro = setInterval(function() { timer() }, 1000);
 }
-
+//Conometro
 function timer() {
     segundo++
     if (segundo==60){
@@ -304,6 +310,7 @@ function timer() {
     document.getElementById('tiempo').innerHTML = tiempoTexto;
 }
 
+//detiene el cronometro
 function stopTimer() {
     clearInterval(cronometro);
 }
@@ -371,6 +378,7 @@ function finDePartirda(tipo){
     guardarInfo(tipo)
 }
 
+//guardamos la irmacion en el localStorage
 function guardarInfo(tipo){
     let cas, par, vic, der
     if ((localStorage.getItem("casillas")!== null)&&(localStorage.getItem("casillas")!== NaN)){
@@ -408,6 +416,7 @@ function guardarInfo(tipo){
     }
 }
 
+//funcion del boton para resetar la partida
 function reiniciar(){
     Swal.fire({
         title: '¿Deseas Reinicar la Partida?',
