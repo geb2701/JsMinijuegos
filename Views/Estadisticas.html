@@ -31,8 +31,41 @@
     </header>
 
     <main class="main-content">
-        <div id="content">
-
+        <div id="EstadisticasPartida" class="centrar">
+            <div>
+                <table class="tablaEstadisticas">
+                    <tr>
+                        <td align="center">
+                            <h1>BUSCA MINAS</h1>
+                        </td>
+                    </tr>
+                </table>
+                <table class="tablaEstadisticas">
+                    <tr class="tablaEstadisticas-2">
+                        <td >
+                            <b>Partidas Jugadas:</b><b id="cPartidas" class="dato"></b>
+                        </td>
+                        <td>
+                            <b>Casillas Correctas:</b><b id="casillasCorrectas" class="dato"></b>
+                        </td>
+                    </tr>
+                    <tr class="tablaEstadisticas-2">
+                        <td >
+                            <b>Victorias:</b><b id="cVictoria" class="dato"></b>
+                        </td>
+                        <td>
+                            <b>Derrotas:</b><b id="cDerrota" class="dato"></b>
+                        </td>
+                    </tr>
+                </table>
+                <table class="tablaEstadisticas">
+                    <tr>
+                        <td align="center">
+                            <button type="button" onclick="Reiniciar()" class="btnBM">Reiniciar Estadisticas</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </main>
 
@@ -42,6 +75,7 @@
         </div>
     </footer>
 
+    <script src="../Js/estadisticas.js"></script>
     <script src="../Js/bootstrap.js"></script>
     <script>
         

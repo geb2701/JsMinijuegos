@@ -191,10 +191,6 @@ function pulsar(id){
         if (document.getElementById("casilla"+id).innerHTML==''){
             revelar(id)
         }
-        //no verifico si es bomba porque si lo fuera la partida acabaria
-        else if (document.getElementById("casilla"+id).innerHTML!='🚩'){
-            dobleClick(id)
-        }
     }
     
 }
@@ -233,9 +229,6 @@ function revelar(id){
         }
         document.getElementById("casillasRestantes").innerHTML=  casillasLibres[0] - casillasLibres[1]
     }
-}
-function dobleClick(id){
-    alert("hola")
 }
 
 //funcion para cambiar el modo para insertar o no las banderas
@@ -465,7 +458,3 @@ fetch('../Js/partidas.json')
         ubicacion.appendChild(td);
     });
 })
-
-
-
-
